@@ -1,12 +1,3 @@
 {
-  "appVersionCode": 510,
-  "appVersionName": "5.7.6",
-  "devVersionCode": 602,
-  "devVersionName": "6.0.2",
-  "target": 26,
-  "mini": 19,
-  "compile": 32,
-  "buildTool": "32.0.0",
-  "IDE": "Android Studio Bumblebee | 2021.1.1",
-  "JDK": "16.0.2"
+  不再用该文件
 }

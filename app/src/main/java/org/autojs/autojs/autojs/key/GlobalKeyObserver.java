@@ -12,8 +12,6 @@ import org.autojs.autojs.autojs.AutoJs;
 import com.stardust.view.accessibility.AccessibilityService;
 import com.stardust.view.accessibility.OnKeyListener;
 
-import javax.microedition.khronos.opengles.GL;
-
 /**
  * Created by Stardust on 2017/8/14.
  */

@@ -1,54 +1,56 @@
-package com.stardust.app;
+package org.autojs.autojs.ui.common;
 
 import android.content.Context;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.afollestad.materialdialogs.MaterialDialog;
-import org.autojs.autojs.R;
+import com.stardust.theme.ThemeColor;
+import com.stardust.theme.widget.ThemeColorImageView;
+
+import org.autojs.autoxjs.R;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import kotlin.Unit;
+import kotlin.reflect.KFunction;
 
 /**
  * Created by Stardust on 2017/6/26.
  */
-
 public class OperationDialogBuilder extends MaterialDialog.Builder {
 
-    private RecyclerView mOperations;
-    private ArrayList<Integer> mIds = new ArrayList<>();
-    private ArrayList<Integer> mIcons = new ArrayList<>();
-    private ArrayList<String> mTexts = new ArrayList<>();
-    private Object mOnItemClickTarget;
+    private final ArrayList<Integer> mIds = new ArrayList<>();
+    private final ArrayList<Integer> mIcons = new ArrayList<>();
+    private final ArrayList<String> mTexts = new ArrayList<>();
+    private final ArrayList<KFunction<Unit>> click = new ArrayList<>();
 
     public OperationDialogBuilder(@NonNull Context context) {
         super(context);
-        mOperations = new RecyclerView(context);
+        RecyclerView mOperations = new RecyclerView(context);
         mOperations.setLayoutManager(new LinearLayoutManager(context));
         mOperations.setAdapter(new RecyclerView.Adapter<ViewHolder>() {
+            @NonNull
             @Override
-            public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
                 return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.operation_dialog_item, parent, false));
             }
 
             @Override
-            public void onBindViewHolder(ViewHolder holder, int position) {
+            public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
                 holder.itemView.setId(mIds.get(position));
                 holder.text.setText(mTexts.get(position));
                 holder.icon.setImageResource(mIcons.get(position));
-                if (mOnItemClickTarget != null) {
-                    //// TODO: 2017/6/26   效率
-                    ButterKnife.bind(mOnItemClickTarget, holder.itemView);
-                }
+                holder.icon.setThemeColor(new ThemeColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.on_surface)));
+                holder.itemView.setOnClickListener(view -> click.get(position).call());
             }
 
             @Override
@@ -70,22 +72,21 @@ public class OperationDialogBuilder extends MaterialDialog.Builder {
         return this;
     }
 
-    public OperationDialogBuilder bindItemClick(Object target) {
-        mOnItemClickTarget = target;
+    @SafeVarargs
+    @NonNull
+    public final OperationDialogBuilder bindItemClick(@NonNull KFunction<Unit>... kFunction0) {
+        click.addAll(Arrays.asList(kFunction0));
         return this;
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
-
-        @BindView(R.id.icon)
-        ImageView icon;
-        @BindView(R.id.text)
+    static class ViewHolder extends RecyclerView.ViewHolder {
+        ThemeColorImageView icon;
         TextView text;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this, itemView);
-
+            icon = itemView.findViewById(R.id.icon);
+            text = itemView.findViewById(R.id.text);
         }
 
     }

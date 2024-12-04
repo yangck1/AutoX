@@ -6,9 +6,8 @@ import android.graphics.Path
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
-import androidx.annotation.RequiresApi
 import android.view.ViewConfiguration
-
+import androidx.annotation.RequiresApi
 import com.stardust.concurrent.VolatileBox
 import com.stardust.concurrent.VolatileDispose
 import com.stardust.util.ScreenMetrics
@@ -57,6 +56,122 @@ class GlobalActionAutomator(private val mHandler: Handler?, private val serviceP
         return performGlobalAction(AccessibilityService.GLOBAL_ACTION_RECENTS)
     }
 
+    /**
+     * Action to take a screenshot
+     */
+    @RequiresApi(Build.VERSION_CODES.P)
+    fun takeScreenshot(): Boolean {
+        return performGlobalAction(AccessibilityService.GLOBAL_ACTION_TAKE_SCREENSHOT)
+    }
+
+    /**
+     * Action to lock the screen
+     */
+    @RequiresApi(Build.VERSION_CODES.P)
+    fun lockScreen(): Boolean {
+        return performGlobalAction(AccessibilityService.GLOBAL_ACTION_LOCK_SCREEN)
+    }
+
+    /**
+     * Action to dismiss the notification shade
+     */
+    @RequiresApi(Build.VERSION_CODES.S)
+    fun dismissNotificationShade(): Boolean {
+        return performGlobalAction(AccessibilityService.GLOBAL_ACTION_DISMISS_NOTIFICATION_SHADE)
+    }
+
+    /**
+     * Action to send the KEYCODE_HEADSETHOOK KeyEvent, which is used to answer/hang up
+     * calls and play/stop media
+     */
+    @RequiresApi(Build.VERSION_CODES.S)
+    fun keyCodeHeadsetHook(): Boolean {
+        return performGlobalAction(AccessibilityService.GLOBAL_ACTION_KEYCODE_HEADSETHOOK)
+    }
+
+    /**
+     * Action to trigger the Accessibility Shortcut. This shortcut has a hardware trigger
+     * and can be activated by holding down the two volume keys.
+     */
+    @RequiresApi(Build.VERSION_CODES.S)
+    fun accessibilityShortcut(): Boolean {
+        return performGlobalAction(AccessibilityService.GLOBAL_ACTION_ACCESSIBILITY_SHORTCUT)
+    }
+
+    /**
+     * Action to bring up the Accessibility Button’s chooser menu
+     */
+    @RequiresApi(Build.VERSION_CODES.S)
+    fun accessibilityButtonChooser(): Boolean {
+        return performGlobalAction(AccessibilityService.GLOBAL_ACTION_ACCESSIBILITY_BUTTON_CHOOSER)
+    }
+
+    /**
+     * Action to trigger the Accessibility Button
+     */
+    @RequiresApi(Build.VERSION_CODES.S)
+    fun accessibilityButton(): Boolean {
+        return performGlobalAction(AccessibilityService.GLOBAL_ACTION_ACCESSIBILITY_BUTTON)
+    }
+
+    /**
+     * Action to show Launcher’s all apps.
+     */
+    @RequiresApi(Build.VERSION_CODES.S)
+    fun accessibilityAllApps(): Boolean {
+        return performGlobalAction(AccessibilityService.GLOBAL_ACTION_ACCESSIBILITY_ALL_APPS)
+    }
+
+    /**
+     * Action to trigger dpad up keyevent.
+     */
+//    @RequiresApi(Build.VERSION_CODES.Tiramisu)
+    fun dpadUp(): Boolean {
+//        return performGlobalAction(AccessibilityService.GLOBAL_ACTION_DPAD_UP)
+        // TODO: 待适配Api Tiramisu
+        return false
+    }
+
+    /**
+     * Action to trigger dpad down keyevent.
+     */
+//    @RequiresApi(Build.VERSION_CODES.Tiramisu)
+    fun dpadDown(): Boolean {
+//        return performGlobalAction(AccessibilityService.GLOBAL_ACTION_DPAD_DOWN)
+        // TODO: 待适配Api Tiramisu
+        return false
+    }
+
+    /**
+     * Action to trigger dpad right keyevent.
+     */
+//    @RequiresApi(Build.VERSION_CODES.Tiramisu)
+    fun dpadRight(): Boolean {
+//        return performGlobalAction(AccessibilityService.GLOBAL_ACTION_DPAD_RIGHT)
+        // TODO: 待适配Api Tiramisu
+        return false
+    }
+
+    /**
+     * Action to trigger dpad left keyevent.
+     */
+//    @RequiresApi(Build.VERSION_CODES.Tiramisu)
+    fun dpadLeft(): Boolean {
+//        return performGlobalAction(AccessibilityService.GLOBAL_ACTION_DPAD_LEFT)
+        // TODO: 待适配Api Tiramisu
+        return false
+    }
+
+    /**
+     * Action to trigger dpad center keyevent.
+     */
+//    @RequiresApi(Build.VERSION_CODES.Tiramisu)
+    fun dpadCenter(): Boolean {
+//        return performGlobalAction(AccessibilityService.GLOBAL_ACTION_DPAD_CENTER)
+        // TODO: 待适配Api Tiramisu
+        return false
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     fun splitScreen(): Boolean {
         return performGlobalAction(AccessibilityService.GLOBAL_ACTION_TOGGLE_SPLIT_SCREEN)
@@ -101,15 +216,19 @@ class GlobalActionAutomator(private val mHandler: Handler?, private val serviceP
     @RequiresApi(api = Build.VERSION_CODES.N)
     private fun gesturesWithHandler(handler: Handler, description: GestureDescription): Boolean {
         val result = VolatileDispose<Boolean>()
-        service.dispatchGesture(description, object : AccessibilityService.GestureResultCallback() {
-            override fun onCompleted(gestureDescription: GestureDescription) {
-                result.setAndNotify(true)
-            }
+        service.dispatchGesture(
+            description,
+            object : AccessibilityService.GestureResultCallback() {
+                override fun onCompleted(gestureDescription: GestureDescription) {
+                    result.setAndNotify(true)
+                }
 
-            override fun onCancelled(gestureDescription: GestureDescription) {
-                result.setAndNotify(false)
-            }
-        }, handler)
+                override fun onCancelled(gestureDescription: GestureDescription) {
+                    result.setAndNotify(false)
+                }
+            },
+            handler
+        )
         return result.blockedGet()
     }
 
@@ -118,17 +237,21 @@ class GlobalActionAutomator(private val mHandler: Handler?, private val serviceP
         prepareLooperIfNeeded()
         val result = VolatileBox(false)
         val handler = Looper.myLooper()?.let { Handler(it) }
-        service.dispatchGesture(description, object : AccessibilityService.GestureResultCallback() {
-            override fun onCompleted(gestureDescription: GestureDescription) {
-                result.set(true)
-                quitLoop()
-            }
+        service.dispatchGesture(
+            description,
+            object : AccessibilityService.GestureResultCallback() {
+                override fun onCompleted(gestureDescription: GestureDescription) {
+                    result.set(true)
+                    quitLoop()
+                }
 
-            override fun onCancelled(gestureDescription: GestureDescription) {
-                result.set(false)
-                quitLoop()
-            }
-        }, handler)
+                override fun onCancelled(gestureDescription: GestureDescription) {
+                    result.set(false)
+                    quitLoop()
+                }
+            },
+            handler
+        )
         Looper.loop()
         return result.get()
     }
@@ -180,5 +303,4 @@ class GlobalActionAutomator(private val mHandler: Handler?, private val serviceP
     fun swipe(x1: Int, y1: Int, x2: Int, y2: Int, delay: Long): Boolean {
         return gesture(0, delay, intArrayOf(x1, y1), intArrayOf(x2, y2))
     }
-
 }

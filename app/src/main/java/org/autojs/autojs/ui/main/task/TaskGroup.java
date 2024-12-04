@@ -3,10 +3,9 @@ package org.autojs.autojs.ui.main.task;
 import android.content.Context;
 
 import com.bignerdranch.expandablerecyclerview.model.Parent;
-import com.stardust.autojs.engine.ScriptEngine;
 import com.stardust.autojs.execution.ScriptExecution;
 
-import org.autojs.autojs.R;
+import org.autojs.autoxjs.R;
 import org.autojs.autojs.autojs.AutoJs;
 import org.autojs.autojs.timing.IntentTask;
 import org.autojs.autojs.timing.TimedTask;
@@ -15,7 +14,6 @@ import org.autojs.autojs.timing.TimedTaskManager;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by Stardust on 2017/11/28.
@@ -57,10 +55,10 @@ public abstract class TaskGroup implements Parent<Task> {
         @Override
         public void refresh() {
             mTasks.clear();
-            for (TimedTask timedTask : TimedTaskManager.getInstance().getAllTasksAsList()) {
+            for (TimedTask timedTask : TimedTaskManager.INSTANCE.getAllTasksAsList()) {
                 mTasks.add(new Task.PendingTask(timedTask));
             }
-            for (IntentTask intentTask : TimedTaskManager.getInstance().getAllIntentTasksAsList()) {
+            for (IntentTask intentTask : TimedTaskManager.INSTANCE.getAllIntentTasksAsList()) {
                 mTasks.add(new Task.PendingTask(intentTask));
             }
         }

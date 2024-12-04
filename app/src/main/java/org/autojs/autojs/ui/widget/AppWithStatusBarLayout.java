@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.res.Configuration;
 import android.graphics.Rect;
-import androidx.annotation.IntDef;
+
 import androidx.annotation.Nullable;
 import com.google.android.material.appbar.AppBarLayout;
 import android.util.AttributeSet;

@@ -13,12 +13,11 @@ import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.DatePicker;
 import android.widget.ProgressBar;
 
 import com.linsh.utilseverywhere.ContextUtils;
-import com.stardust.auojs.inrt.BuildConfig;
-import com.stardust.auojs.inrt.R;
+
+import org.autojs.autoxjs.inrt.R;
 import com.stardust.util.IntentUtil;
 
 import org.json.JSONObject;

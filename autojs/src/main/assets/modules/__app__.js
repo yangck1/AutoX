@@ -154,10 +154,10 @@ module.exports = function (runtime, global) {
 
     app.versionCode = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionCode;
     app.versionName = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
-
+    
     app.autojs = {
-        versionCode: org.autojs.autojs.BuildConfig.VERSION_CODE,
-        versionName: org.autojs.autojs.BuildConfig.VERSION_NAME
+        versionCode: com.stardust.app.GlobalAppContext.getBuildConfig().VERSION_CODE,
+        versionName: com.stardust.app.GlobalAppContext.getBuildConfig().VERSION_NAME
     };
 
     app.intentToShell = function(i) {

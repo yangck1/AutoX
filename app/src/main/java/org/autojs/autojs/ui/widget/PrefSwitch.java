@@ -11,7 +11,7 @@ import com.stardust.theme.ThemeColorHelper;
 import com.stardust.theme.ThemeColorManager;
 import com.stardust.theme.ThemeColorMutable;
 
-import org.autojs.autojs.R;
+import org.autojs.autoxjs.R;
 
 /**
  * Created by Stardust on 2017/8/6.

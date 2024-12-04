@@ -28,6 +28,7 @@
 -dontwarn java.lang.invoke.*
 -dontwarn **$$Lambda$*
 
+-keep class org.autojs.autojs.devplugin.message.** {*;}
 -keep class org.mozilla.javascript.** { *; }
 -keep class com.jecelyin.editor.** { *; }
 -keep class com.stardust.automator.** { *; }
@@ -135,7 +136,29 @@
 -keep class com.wang.avi.** { *; }
 -keep class com.wang.avi.indicators.** { *; }
 
-# Bugly
+# tencent
 
 -dontwarn com.tencent.bugly.**
 -keep public class com.tencent.bugly.**{*;}
+
+-dontwarn dalvik.**
+-dontwarn com.tencent.smtt.**
+
+-keep class com.tencent.smtt.** {
+    *;
+}
+
+-keep class com.tencent.tbs.** {
+    *;
+}
+
+-keep class org.autojs.autoxjs.BuildConfig{
+   *;
+}
+
+-keep interface kotlin.reflect.jvm.internal.impl.builtins.BuiltInsLoader{
+    *;
+}
+-keep class kotlin.reflect.jvm.internal.impl.serialization.deserialization.builtins.BuiltInsLoaderImpl{
+    *;
+}

@@ -1,19 +1,18 @@
 package org.autojs.autojs.ui.widget;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
+
 import androidx.core.content.ContextCompat;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import org.autojs.autojs.R;
+import org.autojs.autoxjs.R;
 
 /**
  * Created by Stardust on 2017/1/29.
@@ -41,7 +40,6 @@ public class ToolbarMenuItem extends LinearLayout {
         init(attrs);
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public ToolbarMenuItem(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         mColorDisabled = ContextCompat.getColor(context, R.color.toolbar_disabled);

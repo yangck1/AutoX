@@ -4,19 +4,15 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.graphics.Rect
-import androidx.annotation.Keep
 import android.view.accessibility.AccessibilityNodeInfo
-
+import androidx.annotation.Keep
 import com.stardust.automator.UiObject
-
-import java.util.ArrayList
-import java.util.HashMap
 
 /**
  * Created by Stardust on 2017/3/10.
  */
 @Keep
-class NodeInfo(resources: Resources?, node: UiObject, var parent: NodeInfo?) {
+class NodeInfo(resources: Resources?, val node: UiObject, var parent: NodeInfo?) {
 
     private val children = ArrayList<NodeInfo>()
     val boundsInScreen = Rect()
@@ -54,7 +50,6 @@ class NodeInfo(resources: Resources?, node: UiObject, var parent: NodeInfo?) {
     var visibleToUser: Boolean = false
     var indexInParent: Int = 0
 
-
     init {
         fullId = node.viewIdResourceName
         id = simplifyId(fullId)
@@ -88,7 +83,7 @@ class NodeInfo(resources: Resources?, node: UiObject, var parent: NodeInfo?) {
         scrollable = node.isScrollable
         visibleToUser = node.visibleToUser()
         node.getBoundsInScreen(boundsInScreen)
-        node.getBoundsInParent(boundsInParent)
+        node.getBoundsInScreen(boundsInParent)
         bounds = boundsToString(boundsInScreen)
         indexInParent = node.indexInParent()
         if (resources != null && packageName != null && fullId != null) {
@@ -97,8 +92,9 @@ class NodeInfo(resources: Resources?, node: UiObject, var parent: NodeInfo?) {
     }
 
     private fun simplifyId(idResourceName: String?): String? {
-        if (idResourceName == null)
+        if (idResourceName == null) {
             return null
+        }
         val i = idResourceName.indexOf('/')
         return idResourceName.substring(i + 1)
     }
@@ -109,38 +105,38 @@ class NodeInfo(resources: Resources?, node: UiObject, var parent: NodeInfo?) {
 
     override fun toString(): String {
         return className + "{" +
-                "childCount=" + children.size +
-                ", mBoundsInScreen=" + boundsInScreen +
-                ", mBoundsInParent=" + boundsInParent +
-                ", id='" + id + '\''.toString() +
-                ", desc='" + desc + '\''.toString() +
-                ", packageName='" + packageName + '\''.toString() +
-                ", text='" + text + '\''.toString() +
-                ", depth=" + depth +
-                ", drawingOrder=" + drawingOrder +
-                ", accessibilityFocused=" + accessibilityFocused +
-                ", checked=" + checked +
-                ", clickable=" + clickable +
-                ", contextClickable=" + contextClickable +
-                ", dismissable=" + dismissable +
-                ", editable=" + editable +
-                ", enabled=" + enabled +
-                ", focusable=" + focusable +
-                ", longClickable=" + longClickable +
-                ", row=" + row +
-                ", column=" + column +
-                ", rowCount=" + rowCount +
-                ", columnCount=" + columnCount +
-                ", rowSpan=" + rowSpan +
-                ", columnSpan=" + columnSpan +
-                ", selected=" + selected +
-                ", scrollable=" + scrollable +
-                ", bounds='" + bounds + '\''.toString() +
-                ", checkable=" + checkable +
-                ", focused=" + focused +
-                ", visibleToUser=" + visibleToUser +
-                ", parent=" + parent?.className +
-                '}'.toString()
+            "childCount=" + children.size +
+            ", mBoundsInScreen=" + boundsInScreen +
+            ", mBoundsInParent=" + boundsInParent +
+            ", id='" + id + '\''.toString() +
+            ", desc='" + desc + '\''.toString() +
+            ", packageName='" + packageName + '\''.toString() +
+            ", text='" + text + '\''.toString() +
+            ", depth=" + depth +
+            ", drawingOrder=" + drawingOrder +
+            ", accessibilityFocused=" + accessibilityFocused +
+            ", checked=" + checked +
+            ", clickable=" + clickable +
+            ", contextClickable=" + contextClickable +
+            ", dismissable=" + dismissable +
+            ", editable=" + editable +
+            ", enabled=" + enabled +
+            ", focusable=" + focusable +
+            ", longClickable=" + longClickable +
+            ", row=" + row +
+            ", column=" + column +
+            ", rowCount=" + rowCount +
+            ", columnCount=" + columnCount +
+            ", rowSpan=" + rowSpan +
+            ", columnSpan=" + columnSpan +
+            ", selected=" + selected +
+            ", scrollable=" + scrollable +
+            ", bounds='" + bounds + '\''.toString() +
+            ", checkable=" + checkable +
+            ", focused=" + focused +
+            ", visibleToUser=" + visibleToUser +
+            ", parent=" + parent?.className +
+            '}'.toString()
     }
 
     companion object {
@@ -149,8 +145,12 @@ class NodeInfo(resources: Resources?, node: UiObject, var parent: NodeInfo?) {
             return rect.toString().replace('-', ',').replace(" ", "").substring(4)
         }
 
-
-        internal fun capture(resourcesCache: HashMap<String, Resources>, context: Context, uiObject: UiObject, parent: NodeInfo?): NodeInfo {
+        internal fun capture(
+            resourcesCache: HashMap<String, Resources>,
+            context: Context,
+            uiObject: UiObject,
+            parent: NodeInfo?
+        ): NodeInfo {
             val pkg = uiObject.packageName()
             var resources: Resources? = null
             if (pkg != null) {
@@ -162,7 +162,6 @@ class NodeInfo(resources: Resources?, node: UiObject, var parent: NodeInfo?) {
                     } catch (e: PackageManager.NameNotFoundException) {
                         e.printStackTrace()
                     }
-
                 }
             }
             val nodeInfo = NodeInfo(resources, uiObject, parent)

@@ -1,20 +1,13 @@
 package org.autojs.autojs.ui.error;
 
+import static android.util.Patterns.EMAIL_ADDRESS;
+
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.StringDef;
-import androidx.annotation.StringRes;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.textfield.TextInputLayout;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -26,10 +19,17 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.DialogAction;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringDef;
+import androidx.annotation.StringRes;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.aakira.expandablelayout.ExpandableRelativeLayout;
-import com.heinrichreimersoftware.androidissuereporter.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputLayout;
 import com.heinrichreimersoftware.androidissuereporter.model.DeviceInfo;
 import com.heinrichreimersoftware.androidissuereporter.model.Report;
 import com.heinrichreimersoftware.androidissuereporter.model.github.ExtraInfo;
@@ -39,8 +39,9 @@ import com.heinrichreimersoftware.androidissuereporter.util.ColorUtils;
 import com.heinrichreimersoftware.androidissuereporter.util.ThemeUtils;
 import com.stardust.theme.ThemeColorManager;
 
-import org.autojs.autojs.BuildConfig;
 import org.autojs.autojs.ui.BaseActivity;
+import org.autojs.autoxjs.BuildConfig;
+import org.autojs.autoxjs.R;
 import org.eclipse.egit.github.core.Issue;
 import org.eclipse.egit.github.core.client.GitHubClient;
 import org.eclipse.egit.github.core.client.RequestException;
@@ -50,8 +51,6 @@ import java.io.IOException;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.ref.WeakReference;
-
-import static android.util.Patterns.EMAIL_ADDRESS;
 
 /**
  * Created by Stardust on 2017/4/3.
@@ -104,8 +103,6 @@ public abstract class AbstractIssueReporterActivity extends BaseActivity {
 
         if (TextUtils.isEmpty(getTitle()))
             setTitle(R.string.air_title_report_issue);
-
-        setContentView(org.autojs.autojs.R.layout.air_activity_issue_reporter);
         findViews();
 
         //noinspection deprecation
@@ -160,15 +157,13 @@ public abstract class AbstractIssueReporterActivity extends BaseActivity {
     }
 
     private void initViews() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(ThemeColorManager.getColorPrimary());
-        }
+        getWindow().setStatusBarColor(ThemeColorManager.getColorPrimary());
         setSupportActionBar(toolbar);
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(org.autojs.autojs.R.string.text_issue_report);
+            actionBar.setTitle(R.string.text_issue_report);
         }
         toolbar.setBackgroundColor(ThemeColorManager.getColorPrimary());
 
@@ -204,11 +199,7 @@ public abstract class AbstractIssueReporterActivity extends BaseActivity {
 
     private void setOptionUseAccountMarginStart(int marginStart) {
         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) optionUseAccount.getLayoutParams();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            layoutParams.setMarginStart(marginStart);
-        } else {
-            layoutParams.leftMargin = marginStart;
-        }
+        layoutParams.setMarginStart(marginStart);
         optionUseAccount.setLayoutParams(layoutParams);
     }
 
@@ -401,9 +392,9 @@ public abstract class AbstractIssueReporterActivity extends BaseActivity {
     public void finish() {
         if (mCrash) {
             if (!mReportFailed) {
-                Toast.makeText(this, org.autojs.autojs.R.string.text_report_succeed, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.text_report_succeed, Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, org.autojs.autojs.R.string.text_report_fail, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.text_report_fail, Toast.LENGTH_SHORT).show();
             }
             finishAffinity();
         } else {
@@ -594,5 +585,10 @@ public abstract class AbstractIssueReporterActivity extends BaseActivity {
         }
 
         protected abstract Dialog createDialog(@NonNull Context context);
+    }
+
+    @Override
+    public int getLayoutId() {
+        return R.layout.air_activity_issue_reporter;
     }
 }

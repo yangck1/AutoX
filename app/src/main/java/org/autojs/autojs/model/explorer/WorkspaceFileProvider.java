@@ -16,7 +16,6 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 import io.reactivex.Observable;
-import io.reactivex.Scheduler;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 
@@ -42,7 +41,7 @@ public class WorkspaceFileProvider extends ExplorerFileProvider {
         return listFiles(new PFile(path))
                 .collectInto(createExplorerPage(path, parent), (p, file) -> {
                     if (file.isDirectory()) {
-                        ProjectConfig projectConfig = ProjectConfig.fromProjectDir(file.getPath());
+                        ProjectConfig projectConfig = ProjectConfig.Companion.fromProject(file);
                         if (projectConfig != null) {
                             p.addChild(new ExplorerProjectPage(file, parent, projectConfig));
                             return;

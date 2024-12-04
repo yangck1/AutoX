@@ -1,8 +1,6 @@
 package com.stardust.auojs.inrt.autojs
 
-import android.util.Log
 import android.view.KeyEvent
-
 import com.stardust.app.GlobalAppContext
 import com.stardust.auojs.inrt.Pref
 import com.stardust.autojs.core.inputevent.InputEventObserver
@@ -30,7 +28,7 @@ class GlobalKeyObserver internal constructor() : OnKeyListener, ShellKeyObserver
 
     fun onVolumeUp() {
         if (Pref.shouldStopAllScriptsWhenVolumeUp()) {
-            AutoJs.instance!!.scriptEngineService.stopAllAndToast()
+            AutoJs.instance.scriptEngineService.stopAllAndToast()
         }
     }
 

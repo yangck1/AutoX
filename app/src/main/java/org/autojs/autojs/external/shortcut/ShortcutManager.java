@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.content.pm.ShortcutInfo;
 import android.graphics.drawable.Icon;
 import android.os.Build;
-import androidx.annotation.Nullable;
+
 import androidx.annotation.RequiresApi;
 
 import java.util.Collections;
@@ -21,8 +21,8 @@ public class ShortcutManager {
 
 
     private static ShortcutManager sInstance;
-    private Context mContext;
-    private android.content.pm.ShortcutManager mShortcutManager;
+    private final Context mContext;
+    private final android.content.pm.ShortcutManager mShortcutManager;
 
 
     public ShortcutManager(Context context) {
@@ -45,8 +45,14 @@ public class ShortcutManager {
         }
         ShortcutInfo shortcut = buildShortcutInfo(label, id, icon, intent);
         int req = getRequestCode(id);
-        PendingIntent successCallback = PendingIntent.getBroadcast(mContext, req,
-                mShortcutManager.createShortcutResultIntent(shortcut), 0);
+
+
+        PendingIntent successCallback = PendingIntent.getBroadcast(
+                mContext,
+                req,
+                mShortcutManager.createShortcutResultIntent(shortcut),
+                PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT
+        );
         mShortcutManager.requestPinShortcut(shortcut, successCallback.getIntentSender());
     }
 
